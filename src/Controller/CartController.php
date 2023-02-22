@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\DTO\Cart;
-use App\Entity\Product;
 use App\Events\CartEvent;
 use App\Interfaces\CartServicesInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +18,9 @@ class CartController extends AbstractController
     public function __construct(protected EntityManagerInterface   $entityManager,
                                 protected EventDispatcherInterface $dispatcher,
                                 protected CartServicesInterface    $cartServices
-    ) { }
+    )
+    {
+    }
 
     #[Route(path: '', name: 'index')]
     public function index(Request $request): Response
@@ -37,9 +38,9 @@ class CartController extends AbstractController
         }
         $event = new CartEvent($cart, $this->cartServices, $this->entityManager);
         $this->dispatcher->dispatch($event, CartEvent::NAME);
-
         return $this->render('products/cart.html.twig', [
             'cart' => $cart,
+            'event' => $event,
         ]);
     }
 }

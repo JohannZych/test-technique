@@ -24,14 +24,8 @@ class CartServices implements CartServicesInterface
         return round($result, 2);
     }
 
-    public function calculateFinalTotal(Cart $cart): float
+    public function calculateFinalTotal(Cart $cart): void
     {
         // TODO: Implement calculateFinalTotal() method.
-        $total = 0 ;
-        $products = $cart->products;
-        foreach($products as $product){
-//            $total = $total + $product['total'];
-        }
-        return round($total, 2);
     }
 }

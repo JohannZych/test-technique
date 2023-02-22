@@ -11,5 +11,5 @@ interface CartServicesInterface
 
     public function calculateTotal(Product $product, float $vatRatio, int $quantity): float;
 
-    public function calculateFinalTotal(Cart $cart): float;
+    public function calculateFinalTotal(Cart $cart): void;
 }
