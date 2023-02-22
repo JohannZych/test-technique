@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,5 +38,21 @@ class ProductRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function findProductVat(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "
+            SELECt product.id, vat_id, sku, price_ht as priceHT, title, description, is_activated, amount FROM product
+                          LEFT JOIN vat on product.vat_id = vat.id
+                          WHERE price_ht > 0 AND is_activated = 1 ;"
+        ;
+        $stmt = $conn->prepare($sql);
+        $resultSet = $stmt->executeQuery();
+        return $resultSet->fetchAllAssociative();
     }
 }
